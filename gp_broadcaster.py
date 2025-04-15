@@ -72,5 +72,5 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print(Fore.GREEN + "Shutting down gracefully...")
+        print(Fore.GREEN + "\nShutting down gracefully...")
         exit(130)
