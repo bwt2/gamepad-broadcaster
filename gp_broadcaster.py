@@ -39,6 +39,8 @@ def select_gamepad() -> GamePad:
     return gamepad_choice
 
 def main():
+    print(Fore.YELLOW + "CTRL+C to shut down program")
+
     gamepad: GamePad = select_gamepad()
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -66,4 +68,9 @@ if __name__ == "__main__":
             except ValueError:
                 print(Fore.RED + f"Invalid UDP port \"{sys.argv[2]}\" specified")
                 exit()
-    main()
+    
+    try:
+        main()
+    except KeyboardInterrupt:
+        print(Fore.GREEN + "Shutting down gracefully...")
+        exit(130)
