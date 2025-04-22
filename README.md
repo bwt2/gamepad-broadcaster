@@ -4,7 +4,8 @@ Tool to broadcast joystick inputs on Windows to [ROS joy](https://github.com/ros
 
 ```mermaid
 flowchart LR
-    id["Gamepad Broadcaster"] -- "UDP" --> id["Joy UDP Relay"] -- "Joy messages" --> id["ROS2 Joy Node"]
+    gb["Gamepad Broadcaster"] -- "UDP" --> jur["Joy UDP Relay"] 
+    jur -- "Joy messages" --> id["ROS2 Joy Node"]
 ```
 
 ## Gamepad Broadcaster
