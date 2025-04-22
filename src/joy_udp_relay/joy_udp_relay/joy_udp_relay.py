@@ -16,6 +16,7 @@ class JoyUDPRelay(Node):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind((UDP_IP, UDP_PORT))
         threading.Thread(target=self.receive_loop, daemon=True).start()
+        self.get_logger().info("Joy UDP Relay successfully initialized")
 
     def receive_loop(self):
         axes = [0.0]*6
@@ -25,13 +26,16 @@ class JoyUDPRelay(Node):
             msg = data.decode()
             print(msg)
             code, state = msg.split(":")
-            state = float(state)
+            match code:
+                case _:
+                    continue
+            # state = float(state)
             # Map event.code to index manually:
-            if code == "ABS_X": axes[0] = state / 32767.0
-            elif code == "ABS_Y": axes[1] = state / 32767.0
-            elif code == "BTN_SOUTH": buttons[0] = int(state)
+            # if code == "ABS_X": axes[0] = state / 32767.0
+            # elif code == "ABS_Y": axes[1] = state / 32767.0
+            # elif code == "BTN_SOUTH": buttons[0] = int(state)
             # Add more mappings as needed
-
+            axes[0] = 1 / 32767.0
             joy_msg = Joy()
             joy_msg.header.stamp = self.get_clock().now().to_msg()
             joy_msg.axes = axes
@@ -42,10 +46,12 @@ def main(args=None):
     rclpy.init(args=args)
 
     relay_node = JoyUDPRelay()
-    rclpy.spin(relay_node)
-    
-    relay_node.destroy_node()
-    rclpy.shutdown()
+    try:
+        rclpy.spin(relay_node)
+    except KeyboardInterrupt:
+        print("\nKeyboardInterrupt received, shutting down [joy_udp_relay]")
+    finally:
+        relay_node.destroy_node()
 
 
 if __name__ == '__main__':
