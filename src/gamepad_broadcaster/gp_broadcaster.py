@@ -39,9 +39,9 @@ def select_gamepad() -> GamePad:
     return gamepad_choice
 
 def main():
-    print(Fore.YELLOW + "CTRL+C to shut down program")
-
     gamepad: GamePad = select_gamepad()
+
+    print(Fore.YELLOW + "CTRL+C to shut down program")
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
