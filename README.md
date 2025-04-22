@@ -13,6 +13,7 @@ Broadcast gamepad inputs from Windows via socket UDP.
 
 ```powershell
 cd .\src\gamepad_broadcaster\
+# setup .venv here
 python gp_broadcaster.py
 ```
 
@@ -29,11 +30,11 @@ python .\test\gp_listener.py
 ```
 
 ## Joy UDP Relay
-This node is the interface transforming joystick states from UDP `127.0.0.1:5005` to joy messages for the ROS2 joy node.
+This node is the interface transforming joystick states from UDP `127.0.0.1:5005` to the `/joy` topic.
 
 ```bash
-source /opt/ros/humble/setup.bash
+# source your ros2 installation here
 colcon build --symlink-install
 source install/setup.bash
-ros2 run joy_udp_relay relay
+ros2 run joy_udp_relay start
 ```

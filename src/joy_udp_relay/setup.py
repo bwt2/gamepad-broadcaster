@@ -15,12 +15,12 @@ setup(
     zip_safe=True,
     maintainer='btja',
     maintainer_email='brian.w.tjahjadi@gmail.com',
-    description='TODO: Package description',
+    description='This node transforms joystick states from UDP `127.0.0.1:5005` to the `/joy` topic.',
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'relay = joy_udp_relay.joy_udp_relay:main',
+            'start = joy_udp_relay.joy_udp_relay:main',
         ],
     },
 )

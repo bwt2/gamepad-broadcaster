@@ -3,7 +3,7 @@
 <package format="3">
   <name>joy_udp_relay</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>This node transforms joystick states from UDP `127.0.0.1:5005` to the `/joy` topic.</description>
   <maintainer email="brian.w.tjahjadi@gmail.com">btja</maintainer>
   <license>TODO: License declaration</license>
 
