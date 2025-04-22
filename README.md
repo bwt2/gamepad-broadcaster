@@ -1,6 +1,7 @@
 # Gamepad ROS2 Broadcaster
 ## About
 Tool to broadcast joystick inputs on Windows as [joy messahes](https://github.com/ros-drivers/joystick_drivers/tree/ros2/joy) to the `/joy` topic via UDP `127.0.0.1:5005`.
+This was tested on an XBOX 360 controller.
 
 ```mermaid
 flowchart LR
@@ -9,21 +10,32 @@ flowchart LR
 ```
 
 ## Gamepad Broadcaster
-Broadcast gamepad inputs from Windows via socket UDP. 
+Broadcast gamepad inputs from Windows via socket UDP. First, `cd .\src\gamepad_broadcaster\` and run
 
 ```powershell
-cd .\src\gamepad_broadcaster\
-# setup .venv here
+# OPTIONAL: setup .venv
 python gp_broadcaster.py
 ```
 
-You can optionally specify the UDP port using `--p` (default port `5005`). 
+See the extra arguments can be used to specify the port and debugging level of the broadcaster using the `-h` flag.
 
 ```powershell
-python gp_broadcaster.py --p 5555
+python gp_broadcaster.py -h
+```
+```powershell
+usage: gp_broadcaster.py [-h] [-p PORT] [-d]
+
+Gamepad broadcaster - sends gamepad inputs over UDP to be received by ROS2 nodes with socket listeners
+
+options:
+  -h, --help       show this help message and exit
+  -p, --port PORT  UDP port to send data to (default: 5005)
+  -d, --debug      turn on debug logs (default: off)
+
+Source: https://github.com/bwt2/gamepad-ros2-broadcaster
 ```
 
-You can test that the broadcaster works using
+You can test if broadcaster works using
 
 ```powershell
 python .\test\gp_listener.py
@@ -31,6 +43,7 @@ python .\test\gp_listener.py
 
 ## Joy UDP Relay
 This node is the interface transforming joystick states from UDP `127.0.0.1:5005` to the `/joy` topic.
+
 
 ```bash
 # source your ros2 installation here

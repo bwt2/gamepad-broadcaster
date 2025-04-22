@@ -3,9 +3,11 @@ import sys
 from inputs import devices, GamePad
 from colorama import init as init_colorama
 from colorama import Fore
+import argparse
 
 UDP_IP = "127.0.0.1"
 UDP_PORT = 5005
+DEBUG = False
 
 def select_gamepad() -> GamePad:
     gamepads: list[GamePad] = [dev for dev in devices.gamepads]
@@ -49,26 +51,36 @@ def main():
         gamepad_events = gamepad.read()
         for event in gamepad_events:
             msg = f"{event.code}:{event.state}"
-            print(f"{event.code}:{event.state} ", end="")
+            if DEBUG: print(f"{event.code}:{event.state} ", end="")
             sock.sendto(msg.encode(), (UDP_IP, UDP_PORT))
             
 
 if __name__ == "__main__":
     init_colorama(autoreset=True)
 
-    if len(sys.argv) >= 4:
-        print(Fore.RED + f"Too many arguments, python gp_broadcaster --p <port>")
-        exit() 
-        
-    if len(sys.argv) == 3:
-        if (sys.argv[1] == "--p"):
-            try:
-                UDP_PORT = int(sys.argv[2])
-                print("Using UDP port: " + Fore.GREEN + str(UDP_PORT))
-            except ValueError:
-                print(Fore.RED + f"Invalid UDP port \"{sys.argv[2]}\" specified")
-                exit()
+    parser = argparse.ArgumentParser(
+        description="Gamepad broadcaster - sends gamepad inputs over UDP to be received by ROS2 nodes with socket listeners",
+        epilog="Source: https://github.com/bwt2/gamepad-ros2-broadcaster"
+    )
     
+    parser.add_argument(
+        "-p", "--port",
+        type=int,
+        default=5005,
+        help="UDP port to send data to (default: 5005)"
+    )
+
+    parser.add_argument(
+        "-d", "--debug",
+        action="store_true",
+        help="turn on debug logs (default: off)"
+    )
+     
+    args = parser.parse_args()
+
+    DEBUG = args.debug
+    UDP_PORT = args.port
+
     try:
         main()
     except KeyboardInterrupt:
