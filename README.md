@@ -23,7 +23,7 @@ See the extra arguments can be used to specify the port and debugging level of t
 python gp_broadcaster.py -h
 ```
 ```powershell
-usage: gp_broadcaster.py [-h] [-p PORT] [-d]
+usage: gp_broadcaster.py [-h] [-p PORT] [-d] [-i]
 
 Gamepad broadcaster - sends gamepad inputs over UDP to be received by ROS2 nodes with socket listeners
 
@@ -31,6 +31,7 @@ options:
   -h, --help       show this help message and exit
   -p, --port PORT  UDP port to send data to (default: 5005)
   -d, --debug      turn on debug logs (default: off)
+  -i, --inputs     use `inputs` instead of `pygame` to process gamepad inputs (default: off)
 
 Source: https://github.com/bwt2/gamepad-ros2-broadcaster
 ```
