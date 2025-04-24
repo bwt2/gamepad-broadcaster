@@ -42,13 +42,21 @@ python .\test\gp_listener.py
 ```
 
 ## Joy UDP Relay
-This node is the interface transforming joystick states from UDP `127.0.0.1:5005` to the `/joy` topic. From your linux distro (e.g. WSL), run
+This node is the interface transforming joystick states from UDP `127.0.0.1:5005` to the `/joy` topic. The node's `autorepeat_rate_hz` parameter sets the rate in Hz (default 20 Hz) that the node resends the previously sent message.
+
+ From your linux distro (e.g. WSL), run
 
 ```bash
 # source your ros2 installation here
 colcon build --symlink-install
 source install/setup.bash
 ros2 run joy_udp_relay start
+```
+
+You can also start the node with the following arguments:
+
+```bash
+ros2 run joy_udp_relay start --ros-args -p UDP_IP:=5001 UDP_PORT:=127.0.0.2  autorepeat_rate_hz:= 30.0
 ```
 
 Alternatively, a one-liner script is provided below

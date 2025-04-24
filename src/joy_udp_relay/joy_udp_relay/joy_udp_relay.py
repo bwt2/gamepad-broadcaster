@@ -4,30 +4,34 @@ from rclpy.node import Node
 from sensor_msgs.msg import Joy
 from .joy_indices import IndexButton, IndexAxis
 
-UDP_IP = "127.0.0.1"
-UDP_PORT = 5005
-AUTOREPEAT_RATE_HZ = 20
-
 def hz_to_ns(hz: float) -> float:
     return 1/(hz*10e9)
 
 class JoyUDPRelay(Node):
     def __init__(self):
         super().__init__('joy_udp_relay')
+        self.declare_parameter('autorepeat_rate_hz', 20.0)
+        self.declare_parameter('UDP_IP', "127.0.0.1")
+        self.declare_parameter('UDP_PORT', 5005)
+
+        autorepeat_rate_hz = self.get_parameter('autorepeat_rate_hz').value
+        self.UDP_IP_ = self.get_parameter('UDP_IP').value
+        self.UDP_PORT_ = self.get_parameter('UDP_PORT').value
+
         self.publisher_ = self.create_publisher(Joy, 'joy', 10)
-        self.autorepeat_interval_ns = hz_to_ns(AUTOREPEAT_RATE_HZ)
+        self.autorepeat_interval_ns_ = hz_to_ns(autorepeat_rate_hz)
         self.last_pub_ = None
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.sock.bind((UDP_IP, UDP_PORT))
-        self.sock.settimeout(self.autorepeat_interval_ns * 10e9) # want 20hz
-        self.get_logger().info(f"Joy UDP Relay binding to UDP {UDP_IP}:{UDP_PORT}")
+        self.sock.bind((self.UDP_IP_, self.UDP_PORT_))
+        self.sock.settimeout(self.autorepeat_interval_ns_ * 10e9) # want 20hz
+        self.get_logger().info(f"Joy UDP Relay binding to UDP {self.UDP_IP_}:{self.UDP_PORT_}")
 
         self.receive_loop()
         
 
     def receive_loop(self) -> None:
-        self.get_logger().info("Joy UDP Relay successfully initialized")
+        self.get_logger().info(f"Joy UDP Relay successfully initialized with autorepeat rate {self.get_parameter('autorepeat_rate_hz').value} Hz")
         self.last_pub_ = self.get_clock().now()
         axes = [0.0]*6
         buttons = [0]*21
@@ -96,7 +100,7 @@ class JoyUDPRelay(Node):
             if not should_publish:
                 now = self.get_clock().now()
                 diff = now - self.last_pub_
-                if diff.nanoseconds > self.autorepeat_interval_ns:
+                if diff.nanoseconds > self.autorepeat_interval_ns_:
                     self.last_pub_ = now
                     should_publish = True
 
