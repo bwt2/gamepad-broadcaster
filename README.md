@@ -9,12 +9,16 @@ flowchart LR
     jur -- "Joy messages" --> id["/joy topic"]
 ```
 
+This code works in two parts:
+1. **Gamepad Broadcaster** - to be run on Windows
+2. **Joy UDP Relay** - to be run on Linux / Ubuntu / WSL
+
 ## Gamepad Broadcaster
-Broadcast gamepad inputs from Windows via socket UDP. First, `cd .\src\gamepad_broadcaster\` and run
+Broadcast gamepad inputs from Windows via socket UDP.
 
 ```powershell
-# OPTIONAL: setup .venv
-python gp_broadcaster.py
+cd .\src\gamepad_broadcaster\
+python gp_broadcaster.py # OPTIONAL: setup .venv
 ```
 
 See the extra arguments can be used to specify the port and debugging level of the broadcaster using the `-h` flag.
@@ -42,7 +46,7 @@ python .\test\gp_listener.py
 ```
 
 ## Joy UDP Relay
-This node is the interface transforming joystick states from UDP `127.0.0.1:5005` to the `/joy` topic.
+This node is the interface transforming joystick states from UDP `127.0.0.1:5005` to the `/joy` topic. From your linux distro (e.g. WSL), run
 
 ```bash
 # source your ros2 installation here
