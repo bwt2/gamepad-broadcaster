@@ -5,16 +5,12 @@ This was tested on an XBOX 360 controller.
 
 ```mermaid
 flowchart LR
-    gb["Gamepad Broadcaster"] -- "UDP" --> jur["Joy UDP Relay"] 
-    jur -- "Joy messages" --> id["/joy topic"]
+    gb["Gamepad Broadcaster"] -- "Joystick Events via UDP" --> jur["Joy UDP Relay"] 
+    jur -- "Joy messages via ROS" --> id["/joy topic"]
 ```
 
-This code works in two parts:
-1. **Gamepad Broadcaster** - to be run on Windows
-2. **Joy UDP Relay** - to be run on Linux / Ubuntu / WSL
-
 ## Gamepad Broadcaster
-Broadcast gamepad inputs from Windows via socket UDP.
+Broadcast gamepad inputs from Windows to a UDP socket to be received by **Joy UDP Relay**.
 
 ```powershell
 cd .\src\gamepad_broadcaster\
