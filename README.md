@@ -44,10 +44,17 @@ python .\test\gp_listener.py
 ## Joy UDP Relay
 This node is the interface transforming joystick states from UDP `127.0.0.1:5005` to the `/joy` topic.
 
-
 ```bash
 # source your ros2 installation here
 colcon build --symlink-install
 source install/setup.bash
 ros2 run joy_udp_relay start
 ```
+
+Alternatively, a one-liner script is provided below
+
+```bash
+bash start-relay.sh
+```
+
+This node is implemented with the same polling logic as the [ROS2 joy node](https://github.com/ros-drivers/joystick_drivers/tree/ros2/joy).

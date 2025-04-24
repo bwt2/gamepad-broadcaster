@@ -46,14 +46,17 @@ def main():
     print(Fore.YELLOW + "CTRL+C to shut down program")
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
+    
+    msg = ""
     while True:
         gamepad_events = gamepad.read()
         for event in gamepad_events:
-            msg = f"{event.code}:{event.state}"
-            if DEBUG: print(f"{event.code}:{event.state} ", end="")
-            sock.sendto(msg.encode(), (UDP_IP, UDP_PORT))
+            msg += f"{event.code}:{event.state} "
             
+        if event.code == "SYN_REPORT":
+            if DEBUG: print(f"SENDING | {msg} ")
+            sock.sendto(msg.encode(), (UDP_IP, UDP_PORT))
+            msg = ""
 
 if __name__ == "__main__":
     init_colorama(autoreset=True)
