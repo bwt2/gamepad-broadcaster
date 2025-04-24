@@ -2,43 +2,10 @@ import rclpy
 import socket
 from rclpy.node import Node
 from sensor_msgs.msg import Joy
-from enum import Enum
+from .indices import IndexButton, IndexAxis
 
 UDP_IP = "127.0.0.1"
 UDP_PORT = 5005
-
-class IndexButton(Enum):
-    A, CROSS = 0, 0
-    B, CIRCLE = 1, 1
-    X, SQUARE = 2, 2
-    Y, TRIANGLE = 3, 3
-    BACK, SELECT = 4, 4
-    GUIDE, MIDDLE = 5, 5
-    START = 6
-    LEFTSTICK = 7
-    RIGHTSTICK = 8
-    LEFTSHOULDER = 9
-    RIGHTSHOULDER = 10
-    DPAD_UP = 11
-    DPAD_DOWN = 12
-    DPAD_LEFT = 13
-    DPAD_RIGHT = 14
-    MISC1 = 15
-    PADDLE1 = 16
-    PADDLE2 = 17
-    PADDLE3 = 18
-    PADDLE4 = 19
-    TOUCHPAD = 20
-
-class IndexAxis(Enum):
-    LEFTX = 0
-    LEFTY = 1
-    RIGHTX = 2
-    RIGHTY = 3
-    TRIGGERLEFT = 4
-    TRIGGERRIGHT = 5
-
-def clamp(n): return max(-1, min(n, 1))
 
 class JoyUDPRelay(Node):
     def __init__(self):
@@ -78,15 +45,15 @@ class JoyUDPRelay(Node):
                     case "ABS_HAT0X":
                         state = int(state)
                         if state == -1:
-                            buttons[IndexButton.DPAD_LEFT.value] = state    
+                            buttons[IndexButton.DPAD_LEFT.value] = -state 
                         elif state == 1:
-                            buttons[IndexButton.DPAD_RIGHT.value] = state                   
+                            buttons[IndexButton.DPAD_RIGHT.value] = state                    
                     case "ABS_HAT0Y":
                         state = int(state)
                         if state == -1:
-                            buttons[IndexButton.DPAD_UP.value] = state    
+                            buttons[IndexButton.DPAD_UP.value] = -state        
                         elif state == 1:
-                            buttons[IndexButton.DPAD_DOWN.value] = state  
+                            buttons[IndexButton.DPAD_DOWN.value] = state         
                     case "ABS_Z":
                         axes[IndexAxis.TRIGGERLEFT.value] = float(state)/255.0
                     case "ABS_RZ":
